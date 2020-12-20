@@ -1,0 +1,48 @@
+#include <iostream>
+#include <deque>
+using namespace std;
+ 
+int main()
+{
+    deque <long long> a, b;
+    int n;
+    cin >> n;
+    for(int i = 0; i < n; i++)
+    {
+        char x;
+        cin >> x;
+        if(x == '+')
+        {
+            long long t;
+            cin >> t;
+            b.push_back(t);
+        }
+        else if(x == '*')
+        {
+            long long t;
+            cin >> t;
+            a.push_back(t);
+        }
+        else
+        {
+            cout << a.front() << endl;
+            a.pop_front();
+        }
+        while(a.size() > b.size() + 1)
+        {
+            b.push_front(a.back());
+            a.pop_back();
+        }
+        while(b.size() > a.size())
+        {
+            a.push_back(b.front());
+            b.pop_front();
+        }
+        if((a.empty()) and (!b.empty()))
+        {
+            a.push_back(b.front());
+            b.pop_front();
+        }
+    }
+    return 0;
+}
