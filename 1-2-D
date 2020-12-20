@@ -1,0 +1,81 @@
+#include <iostream>
+//#include <vector>
+//#include <string>
+#include <stdio.h>
+ 
+using namespace std;
+ 
+pair <long long, int> a[100000];
+int size1 = 0;
+ 
+void siftDown(int i)
+{
+    while(2 * i + 1 < size1)
+    {
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        int j = left;
+        if(right < size1 and a[right].first < a[left].first) j = right;
+        if(a[i].first <= a[j].first) break;
+        swap(a[i], a[j]);
+        i = j;
+    }
+}
+ 
+void siftUp(int i)
+{
+    while(a[i].first < a[(i - 1) / 2].first)
+    {
+        swap(a[i], a[(i - 1) / 2]);
+        i = (i - 1) / 2;
+    }
+}
+ 
+void extractMin()
+{
+    a[0] = a[--size1];
+    siftDown(0);
+}
+ 
+void insert(int key, int i)
+{
+    size1++;
+    a[size1 - 1] = make_pair(key, i);
+    siftUp(size1 - 1);
+}
+ 
+void decreaseKey(int num, int d)
+{
+    int i = 0;
+    while(a[i].second != num) i++;
+    a[i].first -= d;
+    siftUp(i);
+}
+ 
+int main()
+{
+/*    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);*/
+    int n; scanf("%d", &n);
+    for(int i = 0; i < n; i++)
+    {
+        char s[15];
+        scanf("%13s", s);
+        if(s[0] == 'i')
+        {
+            long long x;
+            scanf("%lld", &x);
+            insert(x, i);
+        }
+        if(s[0] == 'g') printf("%lld\n", a[0].first);
+        if(s[0] == 'e') extractMin();
+        if(s[0] == 'd')
+        {
+            int num; long long d;
+            scanf("%d %lld", &num, &d);
+            decreaseKey(num - 1, d);
+        }
+    }
+    return 0;
+}
